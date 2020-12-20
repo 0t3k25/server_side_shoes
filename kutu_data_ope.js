@@ -7,7 +7,6 @@ const path = require("path");
 const { Pool } = require("pg");
 const cors = require("cors");
 const request = require("request").defaults({ encoding: null });
-
 //環境変数
 const env_path = process.env.NODE_PATH;
 //ストレージに関して
@@ -16,7 +15,6 @@ const storage = new Storage({
     projectId: process.env.Project_Id,
     keyFilename: env_path,
 });
-
 //データ情報
 const pool = new Pool({
     database: process.env.Database_Name,
@@ -29,7 +27,6 @@ const pool = new Pool({
         rejectUnauthorized: false,
     },
 });
-
 const PORT = process.env.PORT || 3000;
 
 //ABCmart内のデータ獲得
@@ -54,6 +51,7 @@ class ABCmart_scraping {
             const shoes_type_path = await page.$("h1,category_name_");
             const shoes_type = await (await shoes_type_path.getProperty("textContent")).jsonValue();
             console.log(shoes_type);
+            information_arr.push(shoes_type);
             for (let i = this.first_num; i < this.last_num; i++) {
                 //個々のurl、値段、ブランド、性別、商品名を入れる連想配列
                 let associate_arr = {};
@@ -147,10 +145,12 @@ class cloud_ope {
     }
     //ファイルに書き込み
     draw_file = async () => {
+        const file = await this.file_name;
+        console.log(file);
         //console.log(image_url);
         request(this.url, function (err, response, buffer) {
             // 書き込み
-            fs.writeFile(`${this.file_name}.png`, buffer, (err) => {
+            fs.writeFile(`${file}.png`, buffer, (err) => {
                 if (err) {
                     throw err;
                 } else {
@@ -193,18 +193,24 @@ class cloud_ope {
 
 //DB登録クラスで定義
 class db_ope {
-    constructor(product_name, brand_name, product_url, gender) {
+    constructor(product_name, brand_name, product_url, gender, product_type) {
         this.product_name = product_name;
         this.brand_name = brand_name;
-
         this.product_url = product_url;
         this.gender = gender;
+        this.product_type = product_type;
     }
     //データベースに登録
     register_DB = async () => {
         var query = await {
-            text: `INSERT INTO public. "shoes_data_test" (product_name,brand_name,product_url,gender) VALUES($1,$2,$3,$4)`,
-            values: [this.product_name, this.brand_name, this.product_url, this.gender],
+            text: `INSERT INTO public. "shoes_data_test" (product_name,brand_name,product_url,gender,product_type) VALUES($1,$2,$3,$4,$5)`,
+            values: [
+                this.product_name,
+                this.brand_name,
+                this.product_url,
+                this.gender,
+                this.product_type,
+            ],
         };
         await pool.connect((err, client) => {
             if (err) {
@@ -224,25 +230,29 @@ class db_ope {
 async function run_arr() {
     try {
         const sneaker = new ABCmart_scraping(
-            "https://www.abc-mart.net/shop/c/c71/?sgender=d",
-            17,
-            23
+            "https://www.abc-mart.net/shop/c/c71_srank/#goodslist",
+            0,
+            2
         );
         const sneaker_arr = await sneaker.get_pro_info_arr();
-        console.log(sneaker_arr[0]);
-
-        const file_upload = new cloud_ope(sneaker_arr[0].product_name, sneaker_arr[0].url);
+        //sneaker_arr[0]には靴の種類が入っており、[1]から商品情報が入っている
+        console.log(sneaker_arr[1]);
+        //for (let i = 1; i < 2; i++) {
+        const file_upload = new cloud_ope(sneaker_arr[1].product_name, sneaker_arr[1].url);
+        //console.log(sneaker_arr[0].product_name);
         file_upload.draw_file();
-        /*file_upload.upload_file();
-        file_upload.get_url();
+        file_upload.upload_file();
+        const cloud_url = await file_upload.get_url();
+        //console.log(cloud_url);
         const db = new db_ope(
-            sneaker_arr[0].url,
-            sneaker_arr[0].url,
-            sneaker_arr[0].url,
-            sneaker_arr[0].url,
-            sneaker_arr[0].url
+            sneaker_arr[1].product_name,
+            sneaker_arr[1].brand_name,
+            cloud_url,
+            sneaker_arr[1].gender,
+            sneaker_arr[0]
         );
-        db.register_DB();*/
+        db.register_DB();
+        //}
     } catch (e) {
         console.log(e);
     }
