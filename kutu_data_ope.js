@@ -237,7 +237,7 @@ async function run_arr() {
         for (let i = 1; i < 6; i++) {
             const pic_upload = new cloud_ope(sneaker_arr[i].product_name, sneaker_arr[i].url);
             //console.log(sneaker_arr[0].product_name);
-            pic_upload.upload_file();
+            pic_upload.ordering();
             const cloud_url = await pic_upload.get_url();
             //console.log(cloud_url);
             const db = new db_ope(
