@@ -173,22 +173,20 @@ class cloud_ope {
             await storage.bucket(bucketName).upload(path.resolve(`${this.file_name}.png`), options);
             await console.log(`${this.file_name}.png uploaded to ${bucketName}/product`);
         };
-        uploadFile();
+        await uploadFile();
     };
     //クラウドに存在する画像のURL取得
     get_url = async () => {
         const bucketName = "my-kutu-data";
         console.log("url取得成功");
-        await console.log(
-            `https://storage.googleapis.com/${bucketName}/product/${this.file_name}.png`
-        );
+        console.log(`https://storage.googleapis.com/${bucketName}/product/${this.file_name}.png`);
         return `https://storage.googleapis.com/${bucketName}/product/${this.file_name}.png`;
     };
-    upload_get() {
-        this.draw_file;
-        this.upload_file;
-        this.get_url;
-    }
+    upload_get = async () => {
+        this.draw_file();
+        this.upload_file();
+        this.get_url();
+    };
 }
 
 //DB登録クラスで定義
@@ -232,32 +230,50 @@ async function run_arr() {
         const sneaker = new ABCmart_scraping(
             "https://www.abc-mart.net/shop/c/c71_srank/#goodslist",
             0,
-            2
+            5
         );
         const sneaker_arr = await sneaker.get_pro_info_arr();
         //sneaker_arr[0]には靴の種類が入っており、[1]から商品情報が入っている
-        console.log(sneaker_arr[1]);
-        //for (let i = 1; i < 2; i++) {
-        const file_upload = new cloud_ope(sneaker_arr[1].product_name, sneaker_arr[1].url);
-        //console.log(sneaker_arr[0].product_name);
-        file_upload.draw_file();
-        file_upload.upload_file();
-        const cloud_url = await file_upload.get_url();
-        //console.log(cloud_url);
-        const db = new db_ope(
-            sneaker_arr[1].product_name,
-            sneaker_arr[1].brand_name,
-            cloud_url,
-            sneaker_arr[1].gender,
-            sneaker_arr[0]
-        );
-        db.register_DB();
-        //}
+        //console.log(sneaker_arr[1]);
+        for (let i = 1; i < 6; i++) {
+            const file_upload = new cloud_ope(sneaker_arr[i].product_name, sneaker_arr[i].url);
+            //console.log(sneaker_arr[0].product_name);
+            file_upload.upload_get();
+            const cloud_url = await file_upload.get_url();
+            //console.log(cloud_url);
+            const db = new db_ope(
+                sneaker_arr[i].product_name,
+                sneaker_arr[i].brand_name,
+                cloud_url,
+                sneaker_arr[i].gender,
+                sneaker_arr[0]
+            );
+            db.register_DB();
+        }
     } catch (e) {
         console.log(e);
     }
 }
 run_arr();
+
+//消去操作
+/*function delete_DB(value) {
+    var query = {
+        text: "DELETE FROM shoes_data_test WHERE product_name = $1",
+    };
+    pool.connect((err, client) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("データベース接続成功");
+            client.query(query, [value]).catch((e) => {
+                console.log("接続失敗");
+                console.log(e.stack);
+            });
+        }
+    });
+}
+delete_DB("リッパー");*/
 
 //最終目的
 //パペティアを用いjson形式でデータをとりファイルに書き込む
