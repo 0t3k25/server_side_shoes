@@ -173,7 +173,7 @@ class cloud_ope {
             await storage.bucket(bucketName).upload(path.resolve(`${this.file_name}.png`), options);
             await console.log(`${this.file_name}.png uploaded to ${bucketName}/product`);
         };
-        await uploadFile();
+        uploadFile();
     };
     //クラウドに存在する画像のURL取得
     get_url = async () => {
@@ -182,10 +182,9 @@ class cloud_ope {
         console.log(`https://storage.googleapis.com/${bucketName}/product/${this.file_name}.png`);
         return `https://storage.googleapis.com/${bucketName}/product/${this.file_name}.png`;
     };
-    upload_get = async () => {
-        this.draw_file();
+    ordering = async () => {
+        await this.draw_file();
         this.upload_file();
-        this.get_url();
     };
 }
 
@@ -236,10 +235,10 @@ async function run_arr() {
         //sneaker_arr[0]には靴の種類が入っており、[1]から商品情報が入っている
         //console.log(sneaker_arr[1]);
         for (let i = 1; i < 6; i++) {
-            const file_upload = new cloud_ope(sneaker_arr[i].product_name, sneaker_arr[i].url);
+            const pic_upload = new cloud_ope(sneaker_arr[i].product_name, sneaker_arr[i].url);
             //console.log(sneaker_arr[0].product_name);
-            file_upload.upload_get();
-            const cloud_url = await file_upload.get_url();
+            pic_upload.upload_file();
+            const cloud_url = await pic_upload.get_url();
             //console.log(cloud_url);
             const db = new db_ope(
                 sneaker_arr[i].product_name,
