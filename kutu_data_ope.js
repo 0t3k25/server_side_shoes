@@ -6,7 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const { Pool } = require("pg");
 const cors = require("cors");
-const request = require("request").defaults({ encoding: null });
+const axios = require("axios");
 //環境変数
 const env_path = process.env.NODE_PATH;
 //ストレージに関して
@@ -148,16 +148,12 @@ class cloud_ope {
         const file = await this.file_name;
         console.log(file);
         //console.log(image_url);
-        await request(this.url, function (err, response, buffer) {
-            //console.log("buffer_送信");
-            return buffer;
-        });
+        const res = await axios.get(this.url, { responseType: "arraybuffer" });
+        return res.data;
     };
     upload_file = async () => {
         const bucketName = "my-kutu-data";
-        const file = storage.bucket(bucketName).file("product");
-        await this.get_buffer;
-        console.log(this.get_buffer());
+        const file = storage.bucket(bucketName).file(this.file_name);
         file.save(this.get_buffer(), function (err) {
             console.log(err);
         });
