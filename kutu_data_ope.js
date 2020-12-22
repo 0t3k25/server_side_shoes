@@ -144,13 +144,13 @@ class cloud_ope {
         this.url = url;
     }
     //ファイルに書き込み
-    draw_file = async () => {
+    save_file = async () => {
         const file = await this.file_name;
         console.log(file);
         //console.log(image_url);
-        request(this.url, function (err, response, buffer) {
+        await request(this.url, function (err, response, buffer) {
             // 書き込み
-            fs.writeFile(`${file}.png`, buffer, (err) => {
+            fs.writeFileSync(`${file}.png`, buffer, (err) => {
                 if (err) {
                     throw err;
                 } else {
@@ -183,7 +183,7 @@ class cloud_ope {
         return `https://storage.googleapis.com/${bucketName}/product/${this.file_name}.png`;
     };
     ordering = async () => {
-        await this.draw_file();
+        await this.save_file();
         this.upload_file();
     };
 }
@@ -240,14 +240,14 @@ async function run_arr() {
             pic_upload.ordering();
             const cloud_url = await pic_upload.get_url();
             //console.log(cloud_url);
-            const db = new db_ope(
+            /*const db = new db_ope(
                 sneaker_arr[i].product_name,
                 sneaker_arr[i].brand_name,
                 cloud_url,
                 sneaker_arr[i].gender,
                 sneaker_arr[0]
             );
-            db.register_DB();
+            db.register_DB();*/
         }
     } catch (e) {
         console.log(e);
@@ -256,7 +256,7 @@ async function run_arr() {
 run_arr();
 
 //消去操作
-/*function delete_DB(value) {
+function delete_DB(value) {
     var query = {
         text: "DELETE FROM shoes_data_test WHERE product_name = $1",
     };
@@ -272,7 +272,7 @@ run_arr();
         }
     });
 }
-delete_DB("リッパー");*/
+//delete_DB("スタンスミス");
 
 //最終目的
 //パペティアを用いjson形式でデータをとりファイルに書き込む
