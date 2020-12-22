@@ -144,19 +144,20 @@ class cloud_ope {
         this.url = url;
     }
     //ファイルに書き込み
-    save_file = async () => {
+    get_buffer = async () => {
         const file = await this.file_name;
         console.log(file);
         //console.log(image_url);
         await request(this.url, function (err, response, buffer) {
             // 書き込み
-            fs.writeFileSync(`${file}.png`, buffer, (err) => {
-                if (err) {
-                    throw err;
-                } else {
-                    console.log("ファイル書き込み成功");
-                }
-            });
+            console.log("buffer_送信");
+            return buffer;
+        });
+    };
+    upload_file = async () => {
+        const file = await "my-kutu-data/product";
+        await file.save(this.get_buffer(), function (err) {
+            console.log(err);
         });
     };
     //クラウドストレージにファイルをアップロードするための関数
@@ -237,7 +238,7 @@ async function run_arr() {
         for (let i = 1; i < 6; i++) {
             const pic_upload = new cloud_ope(sneaker_arr[i].product_name, sneaker_arr[i].url);
             //console.log(sneaker_arr[0].product_name);
-            pic_upload.ordering();
+            pic_upload.upload_file();
             const cloud_url = await pic_upload.get_url();
             //console.log(cloud_url);
             /*const db = new db_ope(
