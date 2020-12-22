@@ -154,14 +154,14 @@ class cloud_ope {
             return buffer;
         });
     };
-    upload_file = async () => {
-        const file = await "my-kutu-data/product";
-        await file.save(this.get_buffer(), function (err) {
+    upload_file() {
+        const file = bucket.file("my-kutu-data/product");
+        file.save(this.get_buffer(), function (err) {
             console.log(err);
         });
-    };
+    }
     //クラウドストレージにファイルをアップロードするための関数
-    upload_file = async () => {
+    /*upload_file = async () => {
         const bucketName = "my-kutu-data";
         const options = await {
             destination: `product/${this.file_name}`,
@@ -175,7 +175,7 @@ class cloud_ope {
             await console.log(`${this.file_name}.png uploaded to ${bucketName}/product`);
         };
         uploadFile();
-    };
+    };*/
     //クラウドに存在する画像のURL取得
     get_url = async () => {
         const bucketName = "my-kutu-data";
