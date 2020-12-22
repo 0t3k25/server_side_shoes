@@ -153,6 +153,7 @@ class cloud_ope {
     };
     upload_file = async () => {
         const bucketName = "my-kutu-data";
+        await this.get_buffer();
         const file = storage.bucket(bucketName).file(this.file_name);
         file.save(this.get_buffer(), function (err) {
             console.log(err);
