@@ -149,17 +149,19 @@ class cloud_ope {
         console.log(file);
         //console.log(image_url);
         await request(this.url, function (err, response, buffer) {
-            // 書き込み
-            console.log("buffer_送信");
+            //console.log("buffer_送信");
             return buffer;
         });
     };
-    upload_file() {
-        const file = bucket.file("my-kutu-data/product");
+    upload_file = async () => {
+        const bucketName = "my-kutu-data";
+        const file = storage.bucket(bucketName).file("product");
+        await this.get_buffer;
+        console.log(this.get_buffer());
         file.save(this.get_buffer(), function (err) {
             console.log(err);
         });
-    }
+    };
     //クラウドストレージにファイルをアップロードするための関数
     /*upload_file = async () => {
         const bucketName = "my-kutu-data";
