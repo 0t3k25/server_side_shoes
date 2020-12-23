@@ -153,9 +153,9 @@ class cloud_ope {
     };
     upload_file = async () => {
         const bucketName = "my-kutu-data";
-        await this.get_buffer();
-        const file = storage.bucket(bucketName).file(this.file_name);
-        file.save(this.get_buffer(), function (err) {
+        const url = await this.get_buffer();
+        const file = storage.bucket(bucketName).file(`product/${this.file_name}.png`);
+        file.save(url, function (err) {
             console.log(err);
         });
     };
