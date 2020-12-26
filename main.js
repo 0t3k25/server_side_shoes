@@ -36,7 +36,7 @@ app.get("/topImage", cors(), (req, res) => {
 
 //DBより靴の種類を全て取得
 app.get("/kind_of_shoes", cors(), (req, res) => {
-    pool.query("SELECT * FROM kind_of_shoes ORDER BY id", (err, client) => {
+    pool.query("SELECT * FROM shoes ORDER BY id", (err, client) => {
         if (err) {
             console.log("失敗だよよ1");
             console.log(err);
@@ -50,7 +50,7 @@ app.get("/kind_of_shoes", cors(), (req, res) => {
 //DBより靴の種類をメンズ系のみ取得
 app.get("/kind_of_shoes/men", cors(), (req, res) => {
     pool.query(
-        "SELECT * FROM kind_of_shoes WHERE sex ='unisex' OR sex = 'man' ORDER BY id",
+        "SELECT * FROM shoes WHERE sex ='unisex' OR sex = 'man' ORDER BY id",
         (err, client) => {
             if (err) {
                 console.log("失敗だよよ2");
@@ -66,7 +66,7 @@ app.get("/kind_of_shoes/men", cors(), (req, res) => {
 //DBより靴の種類をレディースのみ取得
 app.get("/kind_of_shoes/women", cors(), (req, res) => {
     pool.query(
-        "SELECT * FROM kind_of_shoes WHERE sex ='unisex' OR sex = 'woman' ORDER BY id",
+        "SELECT * FROM shoes WHERE sex ='unisex' OR sex = 'woman' ORDER BY id",
         (err, client) => {
             if (err) {
                 console.log("失敗だよよ3");
