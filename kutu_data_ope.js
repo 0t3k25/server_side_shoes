@@ -27,7 +27,7 @@ const pool = new Pool({
         rejectUnauthorized: false,
     },
 });
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3003;
 
 //ABCmart内のデータ獲得
 class ABCmart_scraping {
