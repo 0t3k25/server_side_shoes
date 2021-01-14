@@ -5,3 +5,4 @@ if_after_use_code.js
 node_modules
 .DS_Store
 *.png
+config.js
