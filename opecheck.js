@@ -9,7 +9,7 @@ const cors = require("cors");
 console.log("接続成功");
 
 //データベースよりcarousel_imageを取得
-app.get("/", cors(), (req, res) => {
+app.get("/hello", cors(), (req, res) => {
     //console.log(client.rows);
     res.send("hello world");
 });
