@@ -50,7 +50,7 @@ app.get("/kind_of_shoes", cors(), (req, res) => {
 //DBより靴の種類をメンズ系のみ取得
 app.get("/kind_of_shoes/men", cors(), (req, res) => {
     pool.query(
-        "SELECT * FROM kinds WHERE sex ='unisex' OR sex = 'man' ORDER BY id",
+        "SELECT * FROM kinds WHERE gender ='unisex' gender='man' ORDER BY id",
         (err, client) => {
             if (err) {
                 console.log("失敗だよよ2");
@@ -66,7 +66,7 @@ app.get("/kind_of_shoes/men", cors(), (req, res) => {
 //DBより靴の種類をレディースのみ取得
 app.get("/kind_of_shoes/women", cors(), (req, res) => {
     pool.query(
-        "SELECT * FROM kinds WHERE sex ='unisex' OR sex = 'woman' ORDER BY id",
+        "SELECT * FROM kinds WHERE gender ='unisex' OR gender = 'woman' ORDER BY id",
         (err, client) => {
             if (err) {
                 console.log("失敗だよよ3");
