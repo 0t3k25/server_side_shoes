@@ -35,22 +35,25 @@ app.get("/topImage", cors(), (req, res) => {
 });
 
 //DBより靴の種類を全て取得
-app.get("/kind_of_shoes", cors(), (req, res) => {
-    pool.query("SELECT * FROM kinds ORDER BY id", (err, client) => {
-        if (err) {
-            console.log("失敗だよよ1");
-            console.log(err);
-        } else {
-            //console.log(client);
-            res.send(client.rows);
+app.get("/kind_of_shoes/men", cors(), (req, res) => {
+    pool.query(
+        "SELECT * FROM kinds WHERE gender ='unisex' OR gender='man' ORDER BY id",
+        (err, client) => {
+            if (err) {
+                console.log("失敗だよよ1");
+                console.log(err);
+            } else {
+                //console.log(client);
+                res.send(client.rows);
+            }
         }
-    });
+    );
 });
 
 //DBより靴の種類をメンズ系のみ取得
-app.get("/kind_of_shoes/men", cors(), (req, res) => {
+app.get("/kind_of_shoes/women", cors(), (req, res) => {
     pool.query(
-        "SELECT * FROM kinds WHERE gender ='unisex' gender='man' ORDER BY id",
+        "SELECT * FROM kinds WHERE gender ='unisex' OR gender = 'woman' ORDER BY id",
         (err, client) => {
             if (err) {
                 console.log("失敗だよよ2");
@@ -64,19 +67,16 @@ app.get("/kind_of_shoes/men", cors(), (req, res) => {
 });
 
 //DBより靴の種類をレディースのみ取得
-app.get("/kind_of_shoes/women", cors(), (req, res) => {
-    pool.query(
-        "SELECT * FROM kinds WHERE gender ='unisex' OR gender = 'woman' ORDER BY id",
-        (err, client) => {
-            if (err) {
-                console.log("失敗だよよ3");
-                console.log(err);
-            } else {
-                //console.log(client);
-                res.send(client.rows);
-            }
+app.get("/kind_of_shoes/other", cors(), (req, res) => {
+    pool.query("SELECT * FROM kinds ORDER BY id", (err, client) => {
+        if (err) {
+            console.log("失敗だよよ3");
+            console.log(err);
+        } else {
+            //console.log(client);
+            res.send(client.rows);
         }
-    );
+    });
 });
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
