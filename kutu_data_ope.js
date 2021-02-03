@@ -179,8 +179,10 @@ class cloud_ope {
     get_url = async () => {
         const bucketName = "my-kutu-data";
         console.log("url取得成功");
-        console.log(`https://storage.googleapis.com/${bucketName}/product/${this.file_name}.png`);
-        return `https://storage.googleapis.com/${bucketName}/product/${this.file_name}.png`;
+        //console.log(`https://storage.googleapis.com/${bucketName}/product/${this.file_name}.png`);
+        //return `https://storage.googleapis.com/${bucketName}/product/${this.file_name}.png`;
+        console.log(`https://storage.googleapis.com/${bucketName}/product/${this.file_name}.jpg`);
+        return `https://storage.googleapis.com/${bucketName}/product/${this.file_name}.jpg`;
     };
     ordering = async () => {
         await this.save_file();
@@ -253,7 +255,7 @@ async function run_arr() {
         console.log(e);
     }
 }
-run_arr();
+//run_arr();
 
 //消去操作
 function delete_DB(value) {
