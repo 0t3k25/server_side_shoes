@@ -34,7 +34,7 @@ app.get("/topImage", cors(), (req, res) => {
     });
 });
 
-//DBより靴の種類を全て取得
+//DBよりメンズにオススメの靴を取得
 app.get("/kind_of_shoes/men", cors(), (req, res) => {
     pool.query(
         "SELECT * FROM kinds WHERE gender ='unisex' OR gender='man' ORDER BY id",
@@ -50,7 +50,7 @@ app.get("/kind_of_shoes/men", cors(), (req, res) => {
     );
 });
 
-//DBより靴の種類をメンズ系のみ取得
+//DBよりレディースにオススメの靴を取得
 app.get("/kind_of_shoes/women", cors(), (req, res) => {
     pool.query(
         "SELECT * FROM kinds WHERE gender ='unisex' OR gender = 'woman' ORDER BY id",
@@ -66,7 +66,7 @@ app.get("/kind_of_shoes/women", cors(), (req, res) => {
     );
 });
 
-//DBより靴の種類をレディースのみ取得
+//DBよりオススメのアパレルを取得
 app.get("/kind_of_shoes/other", cors(), (req, res) => {
     pool.query("SELECT * FROM kinds ORDER BY id", (err, client) => {
         if (err) {
@@ -79,4 +79,16 @@ app.get("/kind_of_shoes/other", cors(), (req, res) => {
     });
 });
 
+//DBよりカテゴリー一覧を取得
+app.get("/category", cors(), (req, res) => {
+    pool.query("SELECT * FROM sepa_category ORDER BY id", (err, client) => {
+        if (err) {
+            console.log("失敗だよよ3");
+            console.log(err);
+        } else {
+            //console.log(client);
+            res.send(client.rows);
+        }
+    });
+});
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
