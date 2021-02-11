@@ -21,19 +21,6 @@ const pool = new Pool({
 //試し
 console.log("接続成功");
 
-//データベースよりcarousel_imageを取得
-app.get("/topImage", cors(), (req, res) => {
-    pool.query("SELECT * FROM top_img", (err, client) => {
-        if (err) {
-            console.log("失敗だよーーーーーーーーーーーーーん");
-            console.log(err);
-        } else {
-            //console.log(client.rows);
-            res.send(client.rows);
-        }
-    });
-});
-
 //DBよりメンズにオススメの靴を取得
 app.get("/kind_of_shoes/men", cors(), (req, res) => {
     pool.query(
@@ -78,10 +65,33 @@ app.get("/kind_of_shoes/other", cors(), (req, res) => {
         }
     });
 });
-
-//DBよりカテゴリー一覧を取得
-app.get("/category", cors(), (req, res) => {
-    pool.query("SELECT * FROM sepa_category ORDER BY id", (err, client) => {
+//メンズ製品一覧取得
+app.get("/category/men", cors(), (req, res) => {
+    pool.query("SELECT * FROM sepa_category ORDER BY num", (err, client) => {
+        if (err) {
+            console.log("失敗だよよ3");
+            console.log(err);
+        } else {
+            //console.log(client);
+            res.send(client.rows);
+        }
+    });
+});
+//レディース製品一覧取得
+app.get("/category/women", cors(), (req, res) => {
+    pool.query("SELECT * FROM sepa_category ORDER BY num", (err, client) => {
+        if (err) {
+            console.log("失敗だよよ3");
+            console.log(err);
+        } else {
+            //console.log(client);
+            res.send(client.rows);
+        }
+    });
+});
+//アパレル製品一覧
+app.get("/category/apparel", cors(), (req, res) => {
+    pool.query("SELECT * FROM sepa_category ORDER BY num", (err, client) => {
         if (err) {
             console.log("失敗だよよ3");
             console.log(err);
