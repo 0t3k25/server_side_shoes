@@ -1,8 +1,19 @@
-node_modules
 *.env
 *.svg
-if_after_use_code.js
-node_modules
-.DS_Store
 *.png
-config.js
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Ignore built ts files
+dist
+
+.idea/
+.vscode/
+.devcontainer/
+node_modules/
+build/
+tmp/
+temp/
+ormconfig.json
