@@ -1,5 +1,6 @@
-import { EntityRepository, Repository } from 'typeorm'
+import { EntityRepository, Repository, In } from 'typeorm'
 import { Shoe } from '../entity/Shoe'
+import { notEqual } from 'assert'
 
 @EntityRepository(Shoe)
 export class ShoeRepository extends Repository<Shoe> {
@@ -7,6 +8,13 @@ export class ShoeRepository extends Repository<Shoe> {
     return this.find({
       relations: ['images'],
       where: { category: category },
+      take: 20,
+    })
+  }
+  findByGender(gender: string): Promise<Shoe[]> {
+    return this.find({
+      where: { gender: In([gender, 'UNISEX']) },
+      relations: ['images'],
       take: 20,
     })
   }

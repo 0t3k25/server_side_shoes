@@ -27,6 +27,12 @@ export class ShoeController {
     return res.json(shoe)
   }
 
+  @Get('/gender/:gender')
+  async getByGender(@Param('gender') gender: string): Promise<any> {
+    const shoes = await this.shoeRepository.findByGender(gender)
+    return { shoes: shoes }
+  }
+
   @Get('/categories/:category')
   async getByCategory(@Param('category') category: string): Promise<any> {
     const shoes = await this.shoeRepository.findByCategory(category)
