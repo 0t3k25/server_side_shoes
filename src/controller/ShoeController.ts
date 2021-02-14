@@ -28,8 +28,9 @@ export class ShoeController {
   }
 
   @Get('/categories/:category')
-  async getByCategory(@Param('category') category: string): Promise<Shoe[]> {
-    return await this.shoeRepository.findByCategory(category)
+  async getByCategory(@Param('category') category: string): Promise<any> {
+    const shoes = await this.shoeRepository.findByCategory(category)
+    return { shoes: shoes }
   }
 
   @Post('/')
