@@ -116,14 +116,15 @@ function upload_file(filename) {
 //画像のURL取得
 function get_url(file_name) {
     const bucketName = "my-kutu-data";
-    const dir_name = "kind_of_kutu";
+    const dir_name = "category";
     console.log("url取得成功");
-    return `https://storage.googleapis.com/${bucketName}/${dir_name}/${file_name}.svg`;
+    return `https://storage.googleapis.com/${bucketName}/${dir_name}/${file_name}`;
 }
 
 function delete_DB(name) {
+    const bucketName = "kinds";
     var query = {
-        text: "DELETE FROM kind_of_shoes WHERE product_name = $1",
+        text: `DELETE FROM ${bucketName} WHERE product_name = $1`,
     };
     pool.connect((err, client) => {
         if (err) {
@@ -137,13 +138,18 @@ function delete_DB(name) {
         }
     });
 }
+/*
+idによるデータベースの削除
+for (let i = 0; i < 8; i++) {
+    delete_DB(i);
+}*/
 
 //クラウドストレージのURLを受け取りDBに商品情報などと関連させて流す
-function register_DB(product_num, product_name, product_img_url, sex) {
+function register_DB(product_num, product_name, product_img_url, gender, product_info) {
     var query = {
         text:
-            'INSERT INTO public."kind_of_shoes" (id,product_name,product_img_url,sex) VALUES($1,$2,$3,$4)',
-        values: [product_num, product_name, product_img_url, sex],
+            'INSERT INTO public."kinds" (id,product_name,product_img_url,gender,product_info) VALUES($1,$2,$3,$4,$5)',
+        values: [product_num, product_name, product_img_url, gender, product_info],
     };
     pool.connect((err, client) => {
         if (err) {
@@ -157,6 +163,34 @@ function register_DB(product_num, product_name, product_img_url, sex) {
         }
     });
 }
+//categoryのtableに登録
+function register_category_DB(product_num, product_name, product_img_url) {
+    var query = {
+        text:
+            'INSERT INTO public."sepa_category" (id,category_name,category_img_url) VALUES($1,$2,$3)',
+        values: [product_num, product_name, product_img_url],
+    };
+    pool.connect((err, client) => {
+        if (err) {
+            console.log("接続失敗");
+            console.log(err);
+        } else {
+            console.log("接続成功");
+            client.query(query).catch((e) => {
+                console.log(e.stack);
+            });
+        }
+    });
+}
+
+//DBのcategoryに登録
+for (let i = 6; i < 9; i++) {
+    const file_name = ["メンズシューズ", "レディースシューズ", "アパレル"];
+    const file = ["メンズシューズ.jpg", "レディースシューズ.jpg", "アパレル.jpeg"];
+    register_category_DB(i, file_name[i], get_url(file[i]));
+}
+
+//register_DB(2, "ブーツ", get_url("ブーツ.jpg"), "men", "アウトドアに最適");
 
 //全ての処理(エンコードからDB登録)をまとめた関数
 function main(product_num, product_name, target_file, sex) {
