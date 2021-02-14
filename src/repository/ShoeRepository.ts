@@ -4,6 +4,10 @@ import { Shoe } from '../entity/Shoe'
 @EntityRepository(Shoe)
 export class ShoeRepository extends Repository<Shoe> {
   findByCategory(category: string): Promise<Shoe[]> {
-    return this.find({ where: { category: category }, take: 20 })
+    return this.find({
+      relations: ['images'],
+      where: { category: category },
+      take: 20,
+    })
   }
 }
