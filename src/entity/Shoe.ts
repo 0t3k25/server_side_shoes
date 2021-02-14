@@ -21,6 +21,9 @@ export class Shoe {
   @Column()
   listPriceJPY!: number
 
+  @Column()
+  gender!: string
+
   @OneToMany(() => ShoeImage, (shoeImage) => shoeImage.shoe, { cascade: true })
   images!: ShoeImage[]
 }
