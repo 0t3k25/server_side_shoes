@@ -1,16 +1,14 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from 'typeorm'
-import {Shoe} from './Shoe'
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
+import { Shoe } from './Shoe'
 
 @Entity()
 export class ShoeImage {
+  @PrimaryGeneratedColumn()
+  id!: number
 
-    @PrimaryGeneratedColumn()
-    id!: number
+  @Column()
+  url!: string
 
-    @Column()
-    url!: string
-
-    @ManyToOne(() => Shoe, shoe => shoe.images)
-    shoe!: Shoe;
-
+  @ManyToOne(() => Shoe, (shoe) => shoe.images)
+  shoe!: Shoe
 }
