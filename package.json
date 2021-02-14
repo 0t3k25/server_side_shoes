@@ -7,7 +7,7 @@
     "start": "ts-node src/index.ts",
     "dev": "nodemon -L",
     "ts-node": "ts-node",
-    "tsc": "tsc --build --clean",
+    "tsc": "tsc",
     "clean": "rimraf dist/"
   },
   "repository": {
